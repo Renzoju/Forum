@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +20,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'naam',
+        'gebruikersnaam',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -43,6 +47,33 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
+    }
+
+    /**
+     * Relationships
+     */
+    public function threads(): HasMany
+    {
+        return $this->hasMany(Thread::class, 'user_id', 'user_id');
+    }
+
+    public function topics(): HasMany
+    {
+        return $this->hasMany(Topic::class, 'user_id', 'user_id');
+    }
+
+    public function replies(): HasMany
+    {
+        return $this->hasMany(Reply::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Helper methods
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin == 1;
     }
 }

@@ -82,7 +82,7 @@ class ThreadController extends Controller
     {
         $thread = Thread::findOrFail($id);
 
-        // Alleen admin mag verwijderen (volgens opdracht)
+        // delete Threads only as admin
         if (!Auth::user()->isAdmin()) {
             return redirect()->route('threads.index')
                 ->with('error', 'Alleen admins kunnen threads verwijderen.');
@@ -94,7 +94,7 @@ class ThreadController extends Controller
             ->with('success', 'Thread succesvol verwijderd!');
     }
 
-    // Helper method: check of user mag bewerken
+    // Check if user can change stuff
     private function canEdit(Thread $thread): bool
     {
         return Auth::id() === $thread->user_id || Auth::user()->isAdmin();

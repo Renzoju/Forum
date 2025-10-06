@@ -45,7 +45,6 @@ class TopicController extends Controller
     {
         $topic = Topic::findOrFail($id);
 
-        // Alleen eigenaar of admin mag bewerken
         if (!$this->canEdit($topic)) {
             return redirect()->route('topics.show', $topic->topic_id)
                 ->with('error', 'Je mag deze topic niet bewerken.');
@@ -58,7 +57,7 @@ class TopicController extends Controller
     {
         $topic = Topic::findOrFail($id);
 
-        // Alleen eigenaar of admin mag bewerken
+
         if (!$this->canEdit($topic)) {
             return redirect()->route('topics.show', $topic->topic_id)
                 ->with('error', 'Je mag deze topic niet bewerken.');

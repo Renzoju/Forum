@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id('topic_id');
             $table->foreignId('thread_id')->constrained('threads', 'thread_id')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade');
-            $table->string('titel', 200);
+            $table->string('title', 200);
             $table->text('body');
             $table->timestamps(); // created_at en updated_at
 

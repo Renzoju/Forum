@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('threads', function (Blueprint $table) {
             $table->id('thread_id');
             $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade');
-            $table->string('titel', 200);
-            $table->text('beschrijving');
+            $table->string('title', 200);
+            $table->text('description');
             $table->timestamps(); // created_at en updated_at
 
             $table->index('user_id');

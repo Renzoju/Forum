@@ -16,21 +16,32 @@ class ThreadController extends Controller
         return view('threads.index', compact('threads'));
     }
 
+
     public function create(): View
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Alleen administrators kunnen threads aanmaken.');
+        }
+
         return view('threads.create');
     }
 
+
     public function store(Request $request): RedirectResponse
     {
+        if (!Auth::user()->isAdmin()) {
+            return redirect()->route('threads.index')
+                ->with('error', 'Alleen administrators kunnen threads aanmaken.');
+        }
+
         $validated = $request->validate([
-            'titel' => 'required|string|max:200',
-            'beschrijving' => 'required|string',
+            'title' => 'required|string|max:200',
+            'description' => 'required|string',
         ]);
 
         Thread::create([
-            'titel' => $validated['titel'],
-            'beschrijving' => $validated['beschrijving'],
+            'title' => $validated['title'],
+            'description' => $validated['description'],
             'user_id' => Auth::id(),
         ]);
 
@@ -44,32 +55,32 @@ class ThreadController extends Controller
         return view('threads.show', compact('thread'));
     }
 
+
     public function edit(int $id): View|RedirectResponse
     {
         $thread = Thread::findOrFail($id);
 
-        // only admin can change threads
-        if (!$this->canEdit($thread)) {
+        if (!Auth::user()->isAdmin()) {
             return redirect()->route('threads.index')
-                ->with('error', 'Je mag deze thread niet bewerken.');
+                ->with('error', 'Alleen administrators kunnen threads bewerken.');
         }
 
         return view('threads.edit', compact('thread'));
     }
 
+
     public function update(Request $request, int $id): RedirectResponse
     {
         $thread = Thread::findOrFail($id);
 
-
-        if (!$this->canEdit($thread)) {
+        if (!Auth::user()->isAdmin()) {
             return redirect()->route('threads.index')
-                ->with('error', 'Je mag deze thread niet bewerken.');
+                ->with('error', 'Alleen administrators kunnen threads bewerken.');
         }
 
         $validated = $request->validate([
-            'titel' => 'required|string|max:200',
-            'beschrijving' => 'required|string',
+            'title' => 'required|string|max:200',
+            'description' => 'required|string',
         ]);
 
         $thread->update($validated);
@@ -78,25 +89,19 @@ class ThreadController extends Controller
             ->with('success', 'Thread succesvol bijgewerkt!');
     }
 
+
     public function destroy(int $id): RedirectResponse
     {
         $thread = Thread::findOrFail($id);
 
-        // delete Threads only as admin
         if (!Auth::user()->isAdmin()) {
             return redirect()->route('threads.index')
-                ->with('error', 'Alleen admins kunnen threads verwijderen.');
+                ->with('error', 'Alleen administrators kunnen threads verwijderen.');
         }
 
         $thread->delete();
 
         return redirect()->route('threads.index')
             ->with('success', 'Thread succesvol verwijderd!');
-    }
-
-    // Check if user can change stuff
-    private function canEdit(Thread $thread): bool
-    {
-        return Auth::id() === $thread->user_id || Auth::user()->isAdmin();
     }
 }

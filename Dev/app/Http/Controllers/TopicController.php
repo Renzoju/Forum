@@ -11,22 +11,24 @@ use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
+
     public function create(int $threadId): View
     {
         $thread = Thread::findOrFail($threadId);
         return view('topics.create', compact('thread'));
     }
 
+
     public function store(Request $request, int $threadId): RedirectResponse
     {
         $validated = $request->validate([
-            'titel' => 'required|string|max:200',
+            'title' => 'required|string|max:200',
             'body' => 'required|string',
         ]);
 
         Topic::create([
             'thread_id' => $threadId,
-            'titel' => $validated['titel'],
+            'title' => $validated['title'],
             'body' => $validated['body'],
             'user_id' => Auth::id(),
         ]);
@@ -35,56 +37,56 @@ class TopicController extends Controller
             ->with('success', 'Topic succesvol aangemaakt!');
     }
 
-    public function show(int $id): View
+    public function show(int $threadId, int $topicId): View
     {
-        $topic = Topic::with(['replies.user', 'thread', 'user'])->findOrFail($id);
+        $topic = Topic::with(['replies.user', 'thread', 'user'])->findOrFail($topicId);
         return view('topics.show', compact('topic'));
     }
 
-    public function edit(int $id): View|RedirectResponse
+
+    public function edit(int $threadId, int $topicId): View|RedirectResponse
     {
-        $topic = Topic::findOrFail($id);
+        $topic = Topic::findOrFail($topicId);
 
         if (!$this->canEdit($topic)) {
-            return redirect()->route('topics.show', $topic->topic_id)
+            return redirect()->route('topics.show', [$threadId, $topicId])
                 ->with('error', 'Je mag deze topic niet bewerken.');
         }
 
         return view('topics.edit', compact('topic'));
     }
 
-    public function update(Request $request, int $id): RedirectResponse
-    {
-        $topic = Topic::findOrFail($id);
 
+    public function update(Request $request, int $threadId, int $topicId): RedirectResponse
+    {
+        $topic = Topic::findOrFail($topicId);
 
         if (!$this->canEdit($topic)) {
-            return redirect()->route('topics.show', $topic->topic_id)
+            return redirect()->route('topics.show', [$threadId, $topicId])
                 ->with('error', 'Je mag deze topic niet bewerken.');
         }
 
         $validated = $request->validate([
-            'titel' => 'required|string|max:200',
+            'title' => 'required|string|max:200',
             'body' => 'required|string',
         ]);
 
         $topic->update($validated);
 
-        return redirect()->route('topics.show', $topic->topic_id)
+        return redirect()->route('topics.show', [$threadId, $topicId])
             ->with('success', 'Topic succesvol bijgewerkt!');
     }
 
-    public function destroy(int $id): RedirectResponse
-    {
-        $topic = Topic::findOrFail($id);
 
+    public function destroy(int $threadId, int $topicId): RedirectResponse
+    {
+        $topic = Topic::findOrFail($topicId);
 
         if (!Auth::user()->isAdmin()) {
-            return redirect()->route('topics.show', $topic->topic_id)
-                ->with('error', 'Alleen admins kunnen topics verwijderen.');
+            return redirect()->route('topics.show', [$threadId, $topicId])
+                ->with('error', 'Alleen administrators kunnen topics verwijderen.');
         }
 
-        $threadId = $topic->thread_id;
         $topic->delete();
 
         return redirect()->route('threads.show', $threadId)

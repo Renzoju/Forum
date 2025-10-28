@@ -35,13 +35,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // ----------------------------------------
-    // TOPICS (Iedereen mag aanmaken)
+    // TOPICS
     // ----------------------------------------
     Route::get('/thread/{threadId}/topics/create', [TopicController::class, 'create'])->name('topics.create');
     Route::post('/thread/{threadId}/topics', [TopicController::class, 'store'])->name('topics.store');
     Route::get('/thread/{threadId}/topic/{topicId}/edit', [TopicController::class, 'edit'])->name('topics.edit');
     Route::put('/thread/{threadId}/topic/{topicId}', [TopicController::class, 'update'])->name('topics.update');
-    // Delete is admin only - zie hieronder
+
 
     // ----------------------------------------
     // REPLIES
@@ -68,13 +68,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/thread/{id}', [ThreadController::class, 'destroy'])->name('threads.destroy');
 
     // ----------------------------------------
-    // DELETE ROUTES (Alleen admin!)
+    // DELETE ROUTES
     // ----------------------------------------
     Route::delete('/thread/{threadId}/topic/{topicId}', [TopicController::class, 'destroy'])->name('topics.destroy');
     Route::delete('/thread/{threadId}/topic/{topicId}/reply/{replyId}', [ReplyController::class, 'destroy'])->name('replies.destroy');
 
     // ----------------------------------------
-    // USERS BEHEER (Alleen admin!)
+    // USERS BEHEER
     // ----------------------------------------
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/user/{id}', [UserController::class, 'show'])->name('users.show');

@@ -14,8 +14,8 @@ class Thread extends Model
 
     protected $fillable = [
         'user_id',
-        'titel',
-        'beschrijving',
+        'title',
+        'description',
     ];
 
     protected function casts(): array

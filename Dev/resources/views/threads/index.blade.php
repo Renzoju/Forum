@@ -5,9 +5,11 @@
                 {{ __('Forum - Alle Threads') }}
             </h2>
             @auth
-                <a href="{{ route('threads.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    + Nieuwe Thread
-                </a>
+                @if(Auth::user()->isAdmin())
+                    <a href="{{ route('threads.create') }}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                        + Nieuwe Thread
+                    </a>
+                @endif
             @endauth
         </div>
     </x-slot>

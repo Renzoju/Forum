@@ -16,7 +16,7 @@ class Topic extends Model
     protected $fillable = [
         'thread_id',
         'user_id',
-        'title ',
+        'title',
         'body',
     ];
 

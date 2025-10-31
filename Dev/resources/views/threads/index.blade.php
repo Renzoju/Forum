@@ -94,22 +94,22 @@
                         </div>
                     @endforeach
                 </div>
-            @else
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-center text-gray-500">
-                        <p class="mb-4">Er zijn nog geen threads. Wees de eerste!</p>
-                        @auth
-                            <a href="{{ route('threads.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-block">
-                                Maak de eerste thread aan
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-block">
-                                Log in om een thread te maken
-                            </a>
-                        @endauth
+                @else
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-center text-gray-500">
+                            <p class="mb-4">Er zijn nog geen threads.</p>
+                            @auth
+                                @if(Auth::user()->isAdmin())
+                                    <a href="{{ route('threads.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-block">
+                                        Maak de eerste thread aan
+                                    </a>
+                                @endif
+                            @else
+                                <p class="text-sm">Alleen administrators kunnen threads aanmaken.</p>
+                            @endauth
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
 
         </div>
     </div>

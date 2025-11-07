@@ -49,8 +49,8 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $validated = $request->validate([
-            'naam' => 'required|string|max:100',
-            'gebruikersnaam' => 'required|string|max:50|unique:users,gebruikersnaam,' . $id . ',user_id',
+            'name' => 'required|string|max:100',
+            'username' => 'required|string|max:50|unique:users,username,' . $id . ',user_id',
             'email' => 'required|email|max:100|unique:users,email,' . $id . ',user_id',
             'is_admin' => 'required|boolean',
         ]);

@@ -22,7 +22,14 @@
                         </x-nav-link>
                     @endauth
                 </div>
+
+                @if(Auth::check() && Auth::user()->isAdmin())
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users')">
+                        {{ __('Gebruikersbeheer') }}
+                    </x-nav-link>
+                @endif
             </div>
+
 
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

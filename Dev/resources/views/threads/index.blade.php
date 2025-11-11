@@ -1,63 +1,73 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Forum - Alle Threads') }}
-        </h2>
-    </x-slot>
+@extends('layouts.forum')
 
+@section('content')
     <div class="py-8">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-[#1a1c22] shadow-md sm:rounded-lg p-6 border border-gray-800">
 
-                {{-- Meldingen --}}
+
                 @if(session('success'))
-                    <div class="mb-4 bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-green-900/30 border border-green-700 text-green-400 px-4 py-3 rounded">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-4 bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-red-900/30 border border-red-700 text-red-400 px-4 py-3 rounded">
                         {{ session('error') }}
                     </div>
                 @endif
 
-                {{-- Nieuwe thread knop --}}
+
                 @auth
                     @if(auth()->user()->isAdmin())
-                        <div class="mb-6">
+                        <div class="flex justify-end mb-6">
                             <a href="{{ route('threads.create') }}"
-                               class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
+                               class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow-blue-500/30 hover:shadow-blue-400/40 transition">
                                 + Nieuwe Thread
                             </a>
                         </div>
                     @endif
                 @endauth
 
-                {{-- Threads overzicht --}}
+
                 @forelse($threads as $thread)
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 mb-4">
-                        <h2 class="text-xl font-semibold text-blue-700 hover:underline">
+                    <div class="bg-[#181a1f] hover:bg-[#1e2026] border border-gray-800 rounded-lg p-5 mb-4 transition-all shadow-[0_0_10px_rgba(0,0,0,0.25)]">
+
+                        <h2 class="text-lg font-semibold text-gray-100 hover:text-blue-400 transition">
                             <a href="{{ route('threads.show', $thread->thread_id) }}">
                                 {{ $thread->title }}
                             </a>
                         </h2>
 
-                        <p class="text-gray-700 mt-1">
-                            {{ Str::limit($thread->description, 120) }}
+
+                        <p class="text-gray-400 text-sm mt-1">
+                            {{ Str::limit($thread->description, 150, '...') }}
                         </p>
 
-                        <div class="flex items-center justify-between text-sm text-gray-500 mt-3">
+
+                        <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
                             <div class="flex items-center gap-4">
-                                <span>👤 {{ $thread->user->username }}</span>
-                                <span>💬 {{ $thread->topics->count() }} topics</span>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-comments text-gray-500"></i>
+                                    <span>{{ $thread->topics->count() }} topics</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-pen text-gray-500"></i>
+                                    <span>{{ $thread->topics->sum(fn($topic) => $topic->replies->count()) }} posts</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-user text-gray-500"></i>
+                                    <span>{{ $thread->user->username ?? 'Onbekend' }}</span>
+                                </div>
                             </div>
-                            <span>{{ $thread->created_at->diffForHumans() }}</span>
+                            <span>{{ $thread->created_at->format('d M Y') }}</span>
                         </div>
+
 
                         @if(auth()->check() && auth()->user()->isAdmin())
                             <div class="mt-3">
-                                <a href="{{ route('threads.edit', $thread->thread_id) }}" class="text-blue-600 hover:underline">
+                                <a href="{{ route('threads.edit', $thread->thread_id) }}" class="text-blue-500 hover:underline">
                                     Bewerken
                                 </a>
                                 <form
@@ -68,7 +78,7 @@
                                 >
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:underline">Verwijderen</button>
+                                    <button type="submit" class="text-red-500 hover:underline">Verwijderen</button>
                                 </form>
                             </div>
                         @endif
@@ -76,8 +86,7 @@
                 @empty
                     <p class="text-gray-500">Er zijn nog geen threads aangemaakt.</p>
                 @endforelse
-
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

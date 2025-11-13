@@ -66,6 +66,8 @@ class ThreadController extends Controller
         }
 
         return view('threads.edit', compact('thread'));
+
+
     }
 
 

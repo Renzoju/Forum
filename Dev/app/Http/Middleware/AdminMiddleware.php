@@ -23,7 +23,7 @@ class AdminMiddleware
 
 
         if (!auth()->user()->isAdmin()) {
-            abort(403, 'Geen toegang. Alleen admins hebben toegang tot deze pagina.');
+             return redirect()->route('home');
         }
 
         return $next($request);

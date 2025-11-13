@@ -60,7 +60,7 @@ class ReplyController extends Controller
             ->with('success', 'Reply succesvol bijgewerkt!');
     }
 
-    // Alleen admin mag verwijderen (gewone users NIET!)
+
     public function destroy(int $threadId, int $topicId, int $replyId): RedirectResponse
     {
         $reply = Reply::findOrFail($replyId);

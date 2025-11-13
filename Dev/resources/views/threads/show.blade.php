@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <!-- Topics sectie -->
+
             <div class="bg-white p-6 rounded shadow">
                 <h2 class="text-2xl font-semibold mb-4">Topics binnen deze thread</h2>
 

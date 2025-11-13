@@ -21,7 +21,6 @@ class AdminMiddleware
                 ->with('error', 'Je moet ingelogd zijn.');
         }
 
-
         if (!auth()->user()->isAdmin()) {
              return redirect()->route('home');
         }

@@ -17,5 +17,16 @@
         "postcss": "^8.4.31",
         "tailwindcss": "^3.1.0",
         "vite": "^7.0.4"
+    },
+    "dependencies": {
+        "@ckeditor/ckeditor5-basic-styles": "^47.2.0",
+        "@ckeditor/ckeditor5-block-quote": "^47.2.0",
+        "@ckeditor/ckeditor5-code-block": "^47.2.0",
+        "@ckeditor/ckeditor5-editor-classic": "^47.2.0",
+        "@ckeditor/ckeditor5-essentials": "^47.2.0",
+        "@ckeditor/ckeditor5-heading": "^47.2.0",
+        "@ckeditor/ckeditor5-link": "^47.2.0",
+        "@ckeditor/ckeditor5-list": "^47.2.0",
+        "@ckeditor/ckeditor5-paragraph": "^47.2.0"
     }
 }

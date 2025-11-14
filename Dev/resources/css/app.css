@@ -26,7 +26,7 @@
     fill: #ffffff !important;
 }
 
-/* Hover icons lichtblauw */
+
 .ql-toolbar button:hover .ql-stroke,
 .ql-toolbar button:hover .ql-fill {
     stroke: #60a5fa !important;

@@ -1,3 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+
+.ql-container {
+    border: none !important;
+    background-color: #111317 !important;
+    color: #e5e7eb !important;
+    border-radius: 0.5rem;
+}
+
+.ql-toolbar {
+    background-color: #181a1f !important;
+    border: none !important;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+
+.ql-toolbar .ql-stroke {
+    stroke: #ffffff !important;
+}
+.ql-toolbar .ql-fill {
+    fill: #ffffff !important;
+}
+
+/* Hover icons lichtblauw */
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar button:hover .ql-fill {
+    stroke: #60a5fa !important;
+    fill: #60a5fa !important;
+}
+
+
+.ql-editor {
+    color: #e5e7eb !important;
+    background-color: #111317 !important;
+}
+
+
+.ql-editor.ql-blank::before {
+    color: #9ca3af !important;
+    font-style: italic;
+}
+
+
+.ql-syntax {
+    background-color: #0d1117 !important;
+    color: #e2e8f0 !important;
+    border-radius: 6px;
+    padding: 10px;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+
+
+.ql-editor::-webkit-scrollbar {
+    width: 6px;
+}
+.ql-editor::-webkit-scrollbar-thumb {
+    background-color: #2d2f36;
+    border-radius: 10px;
+}

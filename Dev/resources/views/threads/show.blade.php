@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            {{-- Topics --}}
+
             <div class="bg-[#1a1c22] border border-gray-800 rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold text-gray-100 mb-4">
                     Topics binnen deze thread
@@ -39,7 +39,7 @@
                                 </a>
                             </h3>
 
-                            {{-- Topic body (HTML van Quill) --}}
+
                             <div class="prose prose-invert max-w-none mt-2 text-gray-300 leading-relaxed">
                                 {!! Str::limit($topic->body, 250, '...') !!}
                             </div>

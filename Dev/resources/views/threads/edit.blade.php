@@ -1,29 +1,25 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Forum - Thread bewerken') }}
-        </h2>
-    </x-slot>
+@extends('layouts.forum')
 
-    <div class="py-8">
+@section('content')
+    <div class="py-10">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-[#1a1c22] border border-gray-800 shadow-md sm:rounded-lg p-6">
 
 
                 @if(session('success'))
-                    <div class="mb-4 bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-green-900/30 border border-green-700 text-green-400 px-4 py-3 rounded">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-4 bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-red-900/30 border border-red-700 text-red-400 px-4 py-3 rounded">
                         {{ session('error') }}
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="mb-4 bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-red-900/30 border border-red-700 text-red-400 px-4 py-3 rounded">
                         <ul class="list-disc ml-5">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -33,13 +29,18 @@
                 @endif
 
 
+                <h1 class="text-2xl font-semibold text-gray-100 mb-6">
+                    Thread bewerken
+                </h1>
+
+
                 <form method="POST" action="{{ route('threads.update', $thread->thread_id) }}">
                     @csrf
                     @method('PUT')
 
 
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="title" class="block text-sm font-medium text-gray-300 mb-2">
                             Titel *
                         </label>
                         <input
@@ -47,9 +48,10 @@
                             id="title"
                             name="title"
                             value="{{ old('title', $thread->title) }}"
-                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full bg-[#111317] border border-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             maxlength="200"
                             required
+                            placeholder="Bijv: Laravel hulp of PHP discussie"
                         >
                         @error('title')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -58,16 +60,17 @@
 
 
                     <div class="mb-6">
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">
                             Beschrijving *
                         </label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            rows="5"
-                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required
-                        >{{ old('description', $thread->description) }}</textarea>
+
+
+                        <div id="thread-editor" style="height: 300px;" class="bg-white rounded"></div>
+
+
+                        <input type="hidden" id="thread-description-input" name="description"
+                               value="{{ old('description', $thread->description) }}">
+
                         @error('description')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -75,7 +78,7 @@
 
 
                     <div class="flex items-center justify-between">
-                        <a href="{{ route('threads.index') }}" class="text-gray-600 hover:text-gray-800">
+                        <a href="{{ route('threads.show', $thread->thread_id) }}" class="text-gray-400 hover:text-gray-200 transition">
                             Annuleren
                         </a>
 
@@ -93,7 +96,7 @@
                     <form
                         action="{{ route('threads.destroy', $thread->thread_id) }}"
                         method="POST"
-                        class="mt-4"
+                        class="mt-6"
                         onsubmit="return confirm('Weet je zeker dat je deze thread wilt verwijderen?');"
                     >
                         @csrf
@@ -110,4 +113,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

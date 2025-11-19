@@ -33,7 +33,6 @@
 
                 @forelse($threads as $thread)
                     <div class="bg-[#181a1f] hover:bg-[#1e2026] border border-gray-800 rounded-lg p-5 mb-4 transition-all shadow-[0_0_10px_rgba(0,0,0,0.25)]">
-
                         <h2 class="text-lg font-semibold text-gray-100 hover:text-blue-400 transition">
                             <a href="{{ route('threads.show', $thread->thread_id) }}">
                                 {{ $thread->title }}
@@ -42,9 +41,10 @@
 
 
                         <p class="text-gray-400 text-sm mt-1">
-                            {{ Str::limit($thread->description, 150, '...') }}
+                            {!! Str::limit(strip_tags(
+                                preg_replace('/<pre.*?<\/pre>/s', '', $thread->description)
+                            ), 150, '...') !!}
                         </p>
-
 
                         <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
                             <div class="flex items-center gap-4">
@@ -63,7 +63,6 @@
                             </div>
                             <span>{{ $thread->created_at->format('d M Y') }}</span>
                         </div>
-
 
                         @if(auth()->check() && auth()->user()->isAdmin())
                             <div class="mt-3">

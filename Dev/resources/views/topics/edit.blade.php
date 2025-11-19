@@ -1,29 +1,25 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Topic bewerken: ' . $topic->title) }}
-        </h2>
-    </x-slot>
+@extends('layouts.forum')
 
-    <div class="py-8">
+@section('content')
+    <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-[#1a1c22] border border-gray-800 shadow-md sm:rounded-lg p-6">
 
-                {{-- Meldingen --}}
+
                 @if(session('success'))
-                    <div class="mb-4 bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-green-900/30 border border-green-700 text-green-400 px-4 py-3 rounded">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-4 bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-red-900/30 border border-red-700 text-red-400 px-4 py-3 rounded">
                         {{ session('error') }}
                     </div>
                 @endif
 
                 @if($errors->any())
-                    <div class="mb-4 bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded">
+                    <div class="mb-4 bg-red-900/30 border border-red-700 text-red-400 px-4 py-3 rounded">
                         <ul class="list-disc ml-5">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -33,30 +29,47 @@
                 @endif
 
 
-                {{-- UPDATE FORM --}}
-                <form method="POST" action="{{ route('topics.update', ['threadId' => $topic->thread_id, 'topicId' => $topic->topic_id]) }}">
+
+                <h1 class="text-2xl font-semibold text-gray-100 mb-6">
+                    Topic bewerken
+                </h1>
+
+                <form method="POST"
+                      action="{{ route('topics.update', ['threadId' => $topic->thread_id, 'topicId' => $topic->topic_id]) }}">
                     @csrf
                     @method('PUT')
 
-                    {{-- Titel --}}
+
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Titel *</label>
-                        <input type="text" id="title" name="title"
+                        <label for="title" class="block text-sm font-medium text-gray-300 mb-2">Titel *</label>
+                        <input type="text"
+                               id="title"
+                               name="title"
                                value="{{ old('title', $topic->title) }}"
-                               required maxlength="200"
-                               class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                               required
+                               maxlength="200"
+                               class="w-full bg-[#111317] border border-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
-                    {{-- Body --}}
+
                     <div class="mb-6">
-                        <label for="body" class="block text-sm font-medium text-gray-700 mb-2">Bericht *</label>
-                        <textarea id="body" name="body" rows="8" required
-                                  class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('body', $topic->body) }}</textarea>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Bericht *</label>
+
+
+                        <div id="topic-editor" style="height: 300px;" class="bg-white rounded"></div>
+
+
+                        <input type="hidden" id="topic-body-input" name="body" value="{{ old('body', $topic->body) }}">
+
+                        @error('body')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
+
 
                     <div class="flex justify-between items-center">
                         <a href="{{ route('topics.show', ['threadId' => $topic->thread_id, 'topicId' => $topic->topic_id]) }}"
-                           class="text-gray-600 hover:text-gray-800">
+                           class="text-gray-400 hover:text-gray-200 transition">
                             Annuleren
                         </a>
 
@@ -67,11 +80,14 @@
                     </div>
                 </form>
 
-                {{-- DELETE FORM - apart van de update form --}}
+
                 @if(auth()->user()->isAdmin())
                     <div class="mt-4 text-right">
                         <form method="POST"
-                              action="{{ route('topics.destroy', ['threadId' => $topic->thread_id, 'topicId' => $topic->topic_id]) }}"
+                              action="{{ route('topics.destroy', [
+                                  'threadId' => $topic->thread_id,
+                                  'topicId' => $topic->topic_id
+                              ]) }}"
                               onsubmit="return confirm('Weet je zeker dat je deze topic wilt verwijderen?');"
                               class="inline">
                             @csrf
@@ -87,4 +103,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection
